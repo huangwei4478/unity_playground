@@ -39,11 +39,11 @@ public class PlayerController : MonoBehaviour
             if (!success)
             {
                 success = TryMove(new Vector2(movementInput.x, 0));
+            }
 
-                if (!success)
-                {
-                    success = TryMove(new Vector2(0, movementInput.y));
-                }
+            if (!success)
+            {
+                success = TryMove(new Vector2(0, movementInput.y));
             }
 
             animator.SetBool("isMoving", success);
@@ -56,7 +56,7 @@ public class PlayerController : MonoBehaviour
         if (movementInput.x < 0)
         {
             spriteRenderer.flipX = true;
-        } else
+        } else if (movementInput.x > 0)
         {
             spriteRenderer.flipX = false;
         }
@@ -64,6 +64,11 @@ public class PlayerController : MonoBehaviour
 
     private bool TryMove(Vector2 direction)
     {
+        if (direction == Vector2.zero)
+        {
+            return false;
+        }
+
         int count = rb.Cast(
                 direction,
                 movementFilter,
