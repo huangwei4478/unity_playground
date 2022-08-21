@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour
                     movementInput,
                     movementFilter,
                     castCollision,
-                    moveSpeed * Time.deltaTime * collisionOffset
+                    moveSpeed * Time.deltaTime + collisionOffset
                 );
 
             if (count == 0)
