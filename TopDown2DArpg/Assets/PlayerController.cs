@@ -17,10 +17,17 @@ public class PlayerController : MonoBehaviour
 
     List<RaycastHit2D> castCollision = new List<RaycastHit2D>();
 
+    Animator animator;
+
+    SpriteRenderer spriteRenderer;
+
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     private void FixedUpdate()
@@ -28,17 +35,49 @@ public class PlayerController : MonoBehaviour
         // If movement is not zero, try to move
         if (movementInput != Vector2.zero)
         {
-            int count = rb.Cast(
-                    movementInput,
-                    movementFilter,
-                    castCollision,
-                    moveSpeed * Time.deltaTime + collisionOffset
-                );
-
-            if (count == 0)
+            bool success = TryMove(movementInput);
+            if (!success)
             {
-                rb.MovePosition(rb.position + movementInput * moveSpeed * Time.fixedDeltaTime);
+                success = TryMove(new Vector2(movementInput.x, 0));
+
+                if (!success)
+                {
+                    success = TryMove(new Vector2(0, movementInput.y));
+                }
             }
+
+            animator.SetBool("isMoving", success);
+        } else
+        {
+            animator.SetBool("isMoving", false);
+        }
+
+        // Set Character facing
+        if (movementInput.x < 0)
+        {
+            spriteRenderer.flipX = true;
+        } else
+        {
+            spriteRenderer.flipX = false;
+        }
+    }
+
+    private bool TryMove(Vector2 direction)
+    {
+        int count = rb.Cast(
+                direction,
+                movementFilter,
+                castCollision,
+                moveSpeed * Time.deltaTime + collisionOffset
+            );
+
+        if (count == 0)
+        {
+            rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
+            return true;
+        } else
+        {
+            return false;
         }
     }
 
