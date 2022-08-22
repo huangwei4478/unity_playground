@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
+    bool canMove = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -31,6 +33,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (canMove == false)
+        {
+            return;
+        }
+
         // If movement is not zero, try to move
         if (movementInput != Vector2.zero)
         {
@@ -93,5 +100,15 @@ public class PlayerController : MonoBehaviour
     void OnFire()
     {
         animator.SetTrigger("swordAttack");
+    }
+
+    public void LockMovement()
+    {
+        canMove = false;
+    }
+
+    public void UnlockMovement()
+    {
+        canMove = true;
     }
 }
