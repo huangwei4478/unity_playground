@@ -21,7 +21,6 @@ public class PlayerController : MonoBehaviour
 
     SpriteRenderer spriteRenderer;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -89,5 +88,10 @@ public class PlayerController : MonoBehaviour
     void OnMove(InputValue movementInputValue)
     {
         movementInput = movementInputValue.Get<Vector2>();
+    }
+
+    void OnFire()
+    {
+        animator.SetTrigger("swordAttack");
     }
 }
