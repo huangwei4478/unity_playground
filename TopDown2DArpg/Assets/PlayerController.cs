@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
 
     public ContactFilter2D movementFilter;
 
+    public SwordAttack swordAttack;
+
     Vector2 movementInput;
 
     Rigidbody2D rb;
@@ -102,12 +104,49 @@ public class PlayerController : MonoBehaviour
         animator.SetTrigger("swordAttack");
     }
 
-    public void LockMovement()
+    public void StartAttack()
+    {
+        if (spriteRenderer.flipX == true)
+        {
+            swordAttack.AttackLeft();
+        }
+        else
+        {
+            swordAttack.AttackRight();
+        }
+
+        if (swordAttack == null)
+        {
+            Debug.Log("StartAttack - swordAttack is null");
+        }
+        else
+        {
+            Debug.Log("StartAttackAttack - swordAttack is nonnull");
+        }
+
+
+        LockMovement();
+    }
+
+    public void StopAttack()
+    {
+        if (swordAttack == null) 
+        {
+            Debug.Log("StopAttack - swordAttack is null");
+        } else
+        {
+            Debug.Log("StopAttack - swordAttack is nonnull");
+        }
+        swordAttack.StopAttack();
+        UnlockMovement();
+    }
+
+    private void LockMovement()
     {
         canMove = false;
     }
 
-    public void UnlockMovement()
+    private void UnlockMovement()
     {
         canMove = true;
     }
