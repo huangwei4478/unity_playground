@@ -6,6 +6,12 @@ public class Enemy : MonoBehaviour
 {
 
     private float health = 1;
+    private Animator animator;
+
+    private void Start()
+    {
+        animator = GetComponent<Animator>();
+    }
 
     public float Health
     {
@@ -14,7 +20,7 @@ public class Enemy : MonoBehaviour
             health = value;
             if (health <= 0)
             {
-                Defeated();
+                animator.SetTrigger("Defeated");
             }
         }
 
@@ -24,7 +30,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void Defeated()
+    public void EnemyDefeated()
     {
         Destroy(gameObject);
     }
