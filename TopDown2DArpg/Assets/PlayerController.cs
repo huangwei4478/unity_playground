@@ -114,29 +114,11 @@ public class PlayerController : MonoBehaviour
         {
             swordAttack.AttackRight();
         }
-
-        if (swordAttack == null)
-        {
-            Debug.Log("StartAttack - swordAttack is null");
-        }
-        else
-        {
-            Debug.Log("StartAttackAttack - swordAttack is nonnull");
-        }
-
-
         LockMovement();
     }
 
     public void StopAttack()
     {
-        if (swordAttack == null) 
-        {
-            Debug.Log("StopAttack - swordAttack is null");
-        } else
-        {
-            Debug.Log("StopAttack - swordAttack is nonnull");
-        }
         swordAttack.StopAttack();
         UnlockMovement();
     }
