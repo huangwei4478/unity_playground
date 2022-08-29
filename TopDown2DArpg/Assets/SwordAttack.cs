@@ -26,7 +26,7 @@ public class SwordAttack : MonoBehaviour
         swordCollider.enabled = true;
     }
 
-    public void StopAttack()
+    public void HitBoxStopAttack()
     {
         swordCollider.enabled = false;
     }
