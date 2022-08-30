@@ -117,11 +117,11 @@ public class PlayerController : MonoBehaviour
 
         if (spriteRenderer.flipX == true)
         {
-            swordAttack.AttackLeft();
+            swordAttack?.AttackLeft();
         }
         else
         {
-            swordAttack.AttackRight();
+            swordAttack?.AttackRight();
         }
 
         LockMovement();
@@ -129,7 +129,6 @@ public class PlayerController : MonoBehaviour
 
     public void StopAttack()
     {
-
         if (swordAttack == null)
         {
             Debug.Log("StopAttack, swordAttack is null");
@@ -139,7 +138,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("StopAttack, swordAttack is nonnull");
         }
 
-        swordAttack.HitBoxStopAttack();
+        swordAttack?.HitBoxStopAttack();
         UnlockMovement();
     }
 
