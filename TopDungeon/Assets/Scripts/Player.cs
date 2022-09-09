@@ -10,74 +10,50 @@ public class Player : MonoBehaviour
 
     private SpriteRenderer spriteRenderer;
 
-    private bool isMoving;
+    private RaycastHit2D hit;
 
-    private Vector3 origPos, targetPos;
+    private Vector3 moveDelta;
 
-    private float timeToMove = 0.2f;            // 0.2 second for player to move from A to B
+    private int speed = 4;
 
     void Start()
     {
         boxCollider = GetComponent<BoxCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        isMoving = false;
     }
 
     private void FixedUpdate()
     {
-        if (isMoving)
+        float x = Input.GetAxisRaw("Horizontal");
+        float y = Input.GetAxisRaw("Vertical");
+        moveDelta = new Vector3(x, y, 0);
+
+        // check collision for Y-Axis
+        hit = Physics2D.BoxCast(transform.position, 
+	                            boxCollider.size, 
+				                0, 
+				                new Vector2(0, moveDelta.y), 
+				                Mathf.Abs(moveDelta.y * Time.deltaTime * speed), 
+				                LayerMask.GetMask("Actor", "Blocking"));
+
+        if (hit.collider == null) 
+	    {
+            transform.Translate(0, moveDelta.y * Time.deltaTime * speed, 0);
+	    }
+
+        // check collision for X-Axis
+        hit = Physics2D.BoxCast(transform.position,
+                                boxCollider.size,
+                                0,
+                                new Vector2(moveDelta.x, 0),
+                                Mathf.Abs(moveDelta.x * Time.deltaTime * speed),
+                                LayerMask.GetMask("Actor", "Blocking")
+                                );
+
+        if (hit.collider == null)
         {
-            return;
-        }
-
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
-        {
-            StartCoroutine(MovePlayer(Vector3.up));
-        }
-
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            StartCoroutine(MovePlayer(Vector3.left));
-        }
-
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
-            StartCoroutine(MovePlayer(Vector3.right));
-        }
-
-        if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
-        {
-            StartCoroutine(MovePlayer(Vector3.down));
-        }
-
-
-     //   if (moveDelta.x > 0)
-     //   {
-     //       spriteRenderer.flipX = false;
-     //   } else if (moveDelta.x < 0)
-     //   {
-     //       spriteRenderer.flipX = true;
-	    //}
+            transform.Translate(moveDelta.x * Time.deltaTime * speed, 0, 0); 
+	    }
         
-    }
-
-    private IEnumerator MovePlayer(Vector3 direction)
-    {
-        isMoving = true;
-
-        float elapsedTime = 0;
-
-        origPos = transform.position;
-        targetPos = origPos + direction;
-
-        while (elapsedTime < timeToMove)
-        {
-            transform.position = Vector3.Lerp(origPos, targetPos, (elapsedTime / timeToMove));
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-
-        transform.position = targetPos;
-        isMoving = false;
-    }
+    } 
 }
